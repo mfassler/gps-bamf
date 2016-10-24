@@ -1,0 +1,18 @@
+
+10 degrees of freedom:
+
+  https://www.adafruit.com/product/1604
+
+
+Acclerometer and Magnetometer:
+	LSM303DLHC
+	Power consumption:  110 uA
+
+Gyrocsope:
+	L3GD20
+	Power consumption:  6.1 mA
+
+Pressure and Temperature:
+	BMP180
+	Power consumption:  5 uA
+

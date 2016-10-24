@@ -1,0 +1,13 @@
+
+The GPS module:
+
+  https://learn.adafruit.com/adafruit-ultimate-gps
+  https://cdn-learn.adafruit.com/downloads/pdf/adafruit-ultimate-gps.pdf
+
+There's a "v3" written on the board.
+
+
+Power consumption (looking for a lock):  25 mA
+Power consumption (normal, continuous tracking):  20 mA
+
+

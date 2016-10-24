@@ -1,0 +1,17 @@
+
+# AVRIPS2 (The Arduino programmer)
+SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2104", OWNER="fassler"
+
+# FTDi 232 USB-to-Serial adapter:
+##SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", MODE="0664", OWNER="fassler"
+KERNEL=="ttyUSB[0-9]", OWNER="fassler"
+#KERNEL=="ttyUSB[0-9]", SYMLINK+="ttyUSB-FTDi"
+#KERNEL=="ttyUSB[0-9]", RUN+="/bin/setserial /dev/%k spd_cust"
+#KERNEL=="ttyUSB[0-9]", RUN+="/bin/setserial /dev/%k divisor 96"
+#KERNEL=="ttyUSB[0-9]", RUN+="/bin/stty -F /dev/%k 38400"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6010", OWNER="fassler"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6014", OWNER="fassler"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0ce9", ATTRS{idProduct}=="1007", OWNER="fassler"
+
+## USB microscopt
+KERNEL=="video[0-9]", OWNER="fassler"
