@@ -34,7 +34,8 @@ int main(void) {
 	int32_t pressure;
 
 
-	DDRB |= 1<<PD5; // On-board green LED
+	DDRB |= 1<<PB0; // On-board green LED
+	PORTB = 0x01;  // on-board green LED ON
 
 	// Initializations...
 	USART0_Init(9600);
@@ -64,7 +65,7 @@ int main(void) {
 		USART0_printf("presstemp_init() failed: %d\n", retval);
 	}
 
-	tachy_init();
+	//tachy_init();
 
 	_delay_ms(PRINTER_DELAY);
 	USART0_printf("JAGMT means: Jiffies, Accelerometer (x,y,z), Gyro (x,y,z), Mag (x,y,z), Tach%d\n", retval);
@@ -106,7 +107,7 @@ int main(void) {
 		// Each step is ~60 ms.  Precise timing is not guaranteed.
 		switch (step) {
 			case 0:
-				PORTB = 0x20;  // on-board green LED ON
+				PORTB = 0x01;  // on-board green LED ON
 				break;
 			case 1:
 				PORTB = 0x00;  // on-board green LED OFF

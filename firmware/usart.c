@@ -58,7 +58,7 @@ void _try_to_transmit(void) {
 }
 
 
-ISR(USART_RX_vect) {
+ISR(USART0_RX_vect) {
 	// Receive GPS NMEA sentences into a line-by-line FIFO buffer.
 	int i;
 	// Disable interrupts:
@@ -99,7 +99,7 @@ ISR(USART_RX_vect) {
 }
 
 
-ISR(USART_TX_vect) {
+ISR(USART0_TX_vect) {
 	_try_to_transmit();
 }
 

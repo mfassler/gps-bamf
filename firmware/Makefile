@@ -17,7 +17,7 @@ OBJECTS += presstemp.o
 OBJECTS += tach.o
 
 # Processor model, frequency:
-MCU = atmega328p
+MCU = atmega644p
 F_CPU = 8000000
 
 
