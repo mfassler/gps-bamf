@@ -38,9 +38,9 @@ int main(void) {
 	PORTB = 0x01;  // on-board green LED ON
 
 	// Initializations...
-	USART0_Init(9600);
+	USART0_Init(38400);
 	_delay_ms(PRINTER_DELAY);
-	USART0_printf("\n9600 8N1\n");
+	USART0_printf("\n38400 8N1\n");
 	_delay_ms(PRINTER_DELAY);
 
 	USART0_printf("  Hello there!  (^o^)/  This is GPS_Bamf.\n\n");
@@ -49,6 +49,8 @@ int main(void) {
 	_delay_ms(PRINTER_DELAY);
 
 	system_timer_init();
+
+	USART1_Init(9600);
 
 	retval = accel_init();
 	if (retval < 0) {

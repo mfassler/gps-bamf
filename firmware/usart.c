@@ -58,14 +58,14 @@ void _try_to_transmit(void) {
 }
 
 
-ISR(USART0_RX_vect) {
+ISR(USART1_RX_vect) {
 	// Receive GPS NMEA sentences into a line-by-line FIFO buffer.
 	int i;
 	// Disable interrupts:
-	UCSR0B = (1<<RXEN0) |  (1<<TXEN0);
+	UCSR1B = (1<<RXEN1) |  (1<<TXEN1);
 
-	while (UCSR0A & (1 << RXC0)) {  // There is unread data in the receive buffer
-		fifo_buffer[fifo_buffer_len] = UDR0;  // Read from HW into memory
+	while (UCSR1A & (1 << RXC1)) {  // There is unread data in the receive buffer
+		fifo_buffer[fifo_buffer_len] = UDR1;  // Read from HW into memory
 
 		// Lines end in CRLF == '\n\r' == {0x0a, 0x0d}
 
@@ -94,8 +94,8 @@ ISR(USART0_RX_vect) {
 		}
 	}
 
-	// Enable interrupts:
-	UCSR0B = (1<<RXEN0) |  (1<<TXEN0) | (1<<RXCIE0) | (1<<TXCIE0);
+	// Enable RX interrupts:
+	UCSR1B = (1<<RXEN1) |  (1<<TXEN1) | (1<<RXCIE1);
 }
 
 
@@ -105,17 +105,39 @@ ISR(USART0_TX_vect) {
 
 
 void USART0_Init(unsigned int baud_rate) {
+	// USART0 is used to send out debug messages.
+
 	unsigned int ubrr = F_CPU/16/baud_rate - 1;
 
 	// Set baud rate
 	UBRR0H = (unsigned char) (ubrr>>8);
 	UBRR0L = (unsigned char) ubrr;
 
-	// Enable receiver, transmitter, rx interrupts, tx interrupts:
-	UCSR0B = (1<<RXEN0) |  (1<<TXEN0) | (1<<RXCIE0) | (1<<TXCIE0);
+	// Enable receiver, transmitter, and tx interrupts:
+	UCSR0B = (1<<RXEN0) |  (1<<TXEN0) | (1<<TXCIE0);
 
 	// Set frame format: 8N1
 	UCSR0C = (3<<UCSZ00);
+
+	// Enable global interrupts:
+	SREG |= (1 << SREG_I);
+}
+
+
+void USART1_Init(unsigned int baud_rate) {
+	// USART1 is used to receive GPS sentences from the GPS module
+
+	unsigned int ubrr = F_CPU/16/baud_rate - 1;
+
+	// Set baud rate
+	UBRR1H = (unsigned char) (ubrr>>8);
+	UBRR1L = (unsigned char) ubrr;
+
+	// Enable receiver, transmitter, and rx interrupts:
+	UCSR1B = (1<<RXEN1) |  (1<<TXEN1) | (1<<RXCIE1);
+
+	// Set frame format: 8N1
+	UCSR1C = (3<<UCSZ10);
 
 	// Enable global interrupts:
 	SREG |= (1 << SREG_I);
