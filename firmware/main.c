@@ -17,6 +17,7 @@
 #include "magnetometer.h"
 #include "presstemp.h"
 #include "tach.h"
+#include "pps.h"
 
 extern volatile uint32_t jiffies;
 extern volatile uint16_t tachy_count;
@@ -68,6 +69,7 @@ int main(void) {
 	}
 
 	//tachy_init();
+	gps_pps_init();
 
 	_delay_ms(PRINTER_DELAY);
 	USART0_printf("JAGMT means: Jiffies, Accelerometer (x,y,z), Gyro (x,y,z), Mag (x,y,z), Tach%d\n", retval);

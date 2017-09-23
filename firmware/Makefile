@@ -15,6 +15,7 @@ OBJECTS += accelerometer.o
 OBJECTS += magnetometer.o
 OBJECTS += presstemp.o
 OBJECTS += tach.o
+OBJECTS += pps.o
 
 # Processor model, frequency:
 MCU = atmega644p

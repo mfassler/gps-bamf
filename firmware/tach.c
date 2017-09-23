@@ -27,7 +27,7 @@ void tachy_init(void) {
 	// Enable global interrupts:
 	SREG |= (1 << SREG_I);
 
-	// PD2 is INT0 -- trigger an falling
+	// PD2 is INT0 -- trigger on falling
 	EICRA = (1<<ISC01); //0x02;
 	//EICRA = 0x0f;
 
