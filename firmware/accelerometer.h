@@ -2,8 +2,7 @@
 #define __ACCELEROMETER_H
 
 extern int accel_init(void);
-extern int accel_take_sample(void);
-extern int accel_get(int16_t*);
+extern int accel_take_sample(int16_t*);
 
 
 /*

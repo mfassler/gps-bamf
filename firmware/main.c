@@ -14,6 +14,7 @@
 #include "usart.h"
 #include "bamf_twi.h"
 #include "accelerometer.h"
+#include "gyroscope.h"
 #include "magnetometer.h"
 #include "presstemp.h"
 #include "tach.h"
@@ -29,6 +30,7 @@ int main(void) {
 	int retval;
 
 	int16_t accel_xyz[3];
+	int16_t gyro_xyz[3];
 	int16_t magnet_xyz[3];
 
 	int32_t temperature;
@@ -56,6 +58,11 @@ int main(void) {
 	retval = accel_init();
 	if (retval < 0) {
 		USART0_printf("accel_init() failed: %d\n", retval);
+	}
+
+	retval = gyro_init();
+	if (retval < 0) {
+		USART0_printf("gyro_init() failed: %d\n", retval);
 	}
 
 	retval = magnet_init();
@@ -89,24 +96,27 @@ int main(void) {
 	step = 0;
 	while(1) {
 
-		retval = magnet_take_sample();
+		retval = accel_take_sample(accel_xyz);
+		if (retval < 0) {
+			USART0_printf("accel_take_sample() failed: %d \n", retval);
+		}
+
+		retval = magnet_take_sample(magnet_xyz);
 		if (retval < 0) {
 			USART0_printf("magnet_take_sample() failed: %d \n", retval);
 		}
 
-		retval = accel_take_sample();
+		retval = gyro_take_sample(gyro_xyz);
 		if (retval < 0) {
-			USART0_printf("accel_take_sample() failed: %d \n", retval);
-		} else if (retval == 0) {
-			accel_get(accel_xyz);
-			magnet_get(magnet_xyz);
-
-			USART0_printf("JAGMT:%ld,%d,%d,%d,0,0,0,%d,%d,%d,%d\n", jiffies,
-				accel_xyz[0], accel_xyz[1], accel_xyz[2],
-				magnet_xyz[0], magnet_xyz[1], magnet_xyz[2],
-				tachy_count
-			);
+			USART0_printf("gyro_take_sample() failed: %d \n", retval);
 		}
+
+		USART0_printf("JAGMT:%ld,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n", jiffies,
+			accel_xyz[0], accel_xyz[1], accel_xyz[2],
+			gyro_xyz[0], gyro_xyz[1], gyro_xyz[2],
+			magnet_xyz[0], magnet_xyz[1], magnet_xyz[2],
+			tachy_count
+		);
 
 		// Each step is ~60 ms.  Precise timing is not guaranteed.
 		switch (step) {

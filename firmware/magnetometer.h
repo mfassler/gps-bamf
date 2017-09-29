@@ -2,8 +2,7 @@
 #define __MAGNETOMETER_H
 
 extern int magnet_init(void);
-extern int magnet_take_sample(void);
-extern int magnet_get(int16_t*);
+extern int magnet_take_sample(int16_t*);
 
 
 /*
