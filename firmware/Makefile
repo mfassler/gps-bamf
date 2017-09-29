@@ -12,6 +12,7 @@ OBJECTS += system_timer.o
 OBJECTS += usart.o
 OBJECTS += bamf_twi.o
 OBJECTS += accelerometer.o
+OBJECTS += gyroscope.o
 OBJECTS += magnetometer.o
 OBJECTS += presstemp.o
 OBJECTS += tach.o
