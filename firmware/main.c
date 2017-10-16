@@ -75,7 +75,7 @@ int main(void) {
 		USART0_printf("presstemp_init() failed: %d\n", retval);
 	}
 
-	//tachy_init();
+	tachy_init();
 	gps_pps_init();
 
 	_delay_ms(PRINTER_DELAY);
