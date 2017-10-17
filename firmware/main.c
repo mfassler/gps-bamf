@@ -38,7 +38,7 @@ int main(void) {
 
 
 	DDRB |= 1<<PB0; // On-board green LED
-	PORTB = 0x01;  // on-board green LED ON
+	PORTB |= 0x01;  // on-board green LED ON
 
 	// Initializations...
 	USART0_Init(38400);
@@ -121,10 +121,10 @@ int main(void) {
 		// Each step is ~60 ms.  Precise timing is not guaranteed.
 		switch (step) {
 			case 0:
-				PORTB = 0x01;  // on-board green LED ON
+				PORTB |= 0x01;  // on-board green LED ON
 				break;
 			case 1:
-				PORTB = 0x00;  // on-board green LED OFF
+				PORTB &= 0xfe;  // on-board green LED OFF
 				break;
 			case 2:
 				retval = presstemp_get_UT();

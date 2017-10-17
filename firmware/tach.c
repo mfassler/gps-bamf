@@ -22,6 +22,7 @@ void tachy_init(void) {
 	// We want PB2 to be INT2 (external interrupt)
 
 	// PB2 is an input:
+	PORTB |= (1<<PB2); // pull-up resistor
 	DDRB &= ~(1 << PB2);
 
 	// Enable global interrupts:
