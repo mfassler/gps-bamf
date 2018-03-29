@@ -7,7 +7,7 @@
  *
  */
 
-#include <stdio.h> // for datatypes
+#include <stdint.h> // for datatypes
 #include "bamf_twi.h"
 #include "presstemp.h"
 #include "usart.h"

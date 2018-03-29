@@ -104,7 +104,7 @@ ISR(USART0_TX_vect) {
 }
 
 
-void USART0_Init(unsigned int baud_rate) {
+void USART0_Init(uint32_t baud_rate) {
 	// USART0 is used to send out debug messages.
 
 	unsigned int ubrr = F_CPU/16/baud_rate - 1;
@@ -124,7 +124,7 @@ void USART0_Init(unsigned int baud_rate) {
 }
 
 
-void USART1_Init(unsigned int baud_rate) {
+void USART1_Init(uint32_t baud_rate) {
 	// USART1 is used to receive GPS sentences from the GPS module
 
 	unsigned int ubrr = F_CPU/16/baud_rate - 1;

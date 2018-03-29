@@ -6,7 +6,7 @@
  *
  */
 
-#include <stdio.h>  // for datatypes
+#include <stdint.h>  // for datatypes
 #include "bamf_twi.h"
 
 // Address of gyroscope on i2c bus:

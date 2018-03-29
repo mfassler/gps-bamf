@@ -79,7 +79,7 @@ int main(void) {
 	gps_pps_init();
 
 	_delay_ms(PRINTER_DELAY);
-	USART0_printf("JAGMT means: Jiffies, Accelerometer (x,y,z), Gyro (x,y,z), Mag (x,y,z), Tach%d\n", retval);
+	USART0_printf("JAGMT means: Jiffies, Accelerometer (x,y,z), Gyro (x,y,z), Mag (x,y,z), Tach\n");
 	_delay_ms(PRINTER_DELAY);
 	USART0_printf("Jiffies are ~100 Hz.  Precise timing is not gauranteed.\n");
 	_delay_ms(PRINTER_DELAY);
