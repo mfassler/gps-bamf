@@ -157,16 +157,15 @@ void USART0_printf(const char *fmt, ...) {
 	bufLen = vsprintf(buffer, fmt, args);
 	va_end(args);
 
-	if (bufLen > 254) {
+	if (bufLen > 255) {
 		// Bug.  Buffer overflow.  Don't do this...
-		bufLen = 254;
+		bufLen = 255;
 	}
 
-	buffer[bufLen - 1] = 0x0d;  // CR
-	buffer[bufLen] = 0x0a;  // LF
+	//buffer[bufLen - 1] = 0x0d;  // CR
+	//buffer[bufLen] = 0x0a;  // LF
 
-
-	bufLen++;
+	//bufLen++;
 	for (i=0; i < bufLen; i++) {
 		print_buffer[print_producer_idx] = buffer[i];
 
