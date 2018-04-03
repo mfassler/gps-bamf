@@ -21,6 +21,7 @@
 // sentences don't get mixed.
 
 // The ATmega328 has 2K of SRAM
+// The ATmega644 has 4K of SRAM
 // Apparently, a NMEA sentence is, at most, 82 chars.
 // So let's try an input buffer of 90 bytes * 5 lines (450 bytes)
 //  (this input buffer will be re-used as the output buffer for GPS/NMEA sentences)
@@ -33,11 +34,13 @@
 // To put data into a FIFO is the "Producer"
 // To take data from a FIFO is the "Consumer"
 
+// To write to the SDcard we must always write in blocks of 512 bytes.
 
 #define PRINT_BUFFER_SIZE 1024
 volatile char print_buffer[PRINT_BUFFER_SIZE];
 volatile uint16_t print_producer_idx = 0;
 volatile uint16_t print_consumer_idx = 0;
+volatile uint16_t sdcard_consumer_idx = 0;
 
 #define FIFO_BUFFER_SIZE 100
 volatile char fifo_buffer[FIFO_BUFFER_SIZE];
@@ -67,8 +70,7 @@ ISR(USART1_RX_vect) {
 	while (UCSR1A & (1 << RXC1)) {  // There is unread data in the receive buffer
 		fifo_buffer[fifo_buffer_len] = UDR1;  // Read from HW into memory
 
-		// Lines end in CRLF == '\n\r' == {0x0a, 0x0d}
-
+		// Lines end in CRLF == '\r\n' == {0x0d, 0x0a}
 		if (fifo_buffer[fifo_buffer_len] == 0x0a) {  // EOL
 
 			for (i=0; i <= fifo_buffer_len; i++) {
@@ -114,7 +116,8 @@ void USART0_Init(uint32_t baud_rate) {
 	UBRR0L = (unsigned char) ubrr;
 
 	// Enable receiver, transmitter, and tx interrupts:
-	UCSR0B = (1<<RXEN0) |  (1<<TXEN0) | (1<<TXCIE0);
+	//UCSR0B = (1<<RXEN0) |  (1<<TXEN0) | (1<<TXCIE0);  // we're not using the rx
+	UCSR0B = (1<<TXEN0) | (1<<TXCIE0);
 
 	// Set frame format: 8N1
 	UCSR0C = (3<<UCSZ00);
@@ -151,10 +154,10 @@ void USART0_printf(const char *fmt, ...) {
 	int i;
 
 	// Disable interrupts:
-	UCSR0B = (1<<RXEN0) |  (1<<TXEN0);
+	UCSR0B = (1<<RXEN0) | (1<<TXEN0);
 
 	va_start(args, fmt);
-	bufLen = vsprintf(buffer, fmt, args);
+	bufLen = vsnprintf(buffer, 255, fmt, args);
 	va_end(args);
 
 	if (bufLen > 255) {
@@ -162,10 +165,8 @@ void USART0_printf(const char *fmt, ...) {
 		bufLen = 255;
 	}
 
-	//buffer[bufLen - 1] = 0x0d;  // CR
-	//buffer[bufLen] = 0x0a;  // LF
-
-	//bufLen++;
+	// Disable interrupts for GPS-Receive:
+	UCSR1B = (1<<RXEN1) |  (1<<TXEN1);
 	for (i=0; i < bufLen; i++) {
 		print_buffer[print_producer_idx] = buffer[i];
 
@@ -174,10 +175,13 @@ void USART0_printf(const char *fmt, ...) {
 			print_producer_idx = 0;
 		}
 	}
+	// Enable interrupts for GPS-Receive:
+	UCSR1B = (1<<RXEN1) |  (1<<TXEN1) | (1<<RXCIE1);
 
 	_try_to_transmit();
 
 	// Enable interrupts:
-	UCSR0B = (1<<RXEN0) |  (1<<TXEN0) | (1<<RXCIE0) | (1<<TXCIE0);
+	//UCSR0B = (1<<RXEN0) |  (1<<TXEN0) | (1<<RXCIE0) | (1<<TXCIE0);  // we're not using the rx
+	UCSR0B = (1<<TXEN0) | (1<<TXCIE0);
 }
 
