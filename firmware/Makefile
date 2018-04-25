@@ -17,6 +17,7 @@ OBJECTS += magnetometer.o
 OBJECTS += presstemp.o
 OBJECTS += tach.o
 OBJECTS += pps.o
+OBJECTS += sdcard.o
 
 # Processor model, frequency:
 MCU = atmega644p

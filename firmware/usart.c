@@ -40,11 +40,13 @@
 volatile char print_buffer[PRINT_BUFFER_SIZE];
 volatile uint16_t print_producer_idx = 0;
 volatile uint16_t print_consumer_idx = 0;
-volatile uint16_t sdcard_consumer_idx = 0;
+//volatile uint16_t sdcard_consumer_idx = 0;
 
 #define FIFO_BUFFER_SIZE 100
 volatile char fifo_buffer[FIFO_BUFFER_SIZE];
 volatile uint8_t fifo_buffer_len = 0;
+
+extern int sdcard_write_from_circ_buffer(volatile char*, uint16_t, uint16_t);
 
 
 void _try_to_transmit(void) {
@@ -58,6 +60,10 @@ void _try_to_transmit(void) {
 			print_consumer_idx = 0;
 		}
 	}
+
+	// kick off the tx process for the sdcard
+	sdcard_write_from_circ_buffer(print_buffer, print_producer_idx, PRINT_BUFFER_SIZE);
+
 }
 
 

@@ -19,6 +19,7 @@
 #include "presstemp.h"
 #include "tach.h"
 #include "pps.h"
+#include "sdcard.h"
 
 extern volatile uint32_t jiffies;
 extern volatile uint16_t tachy_count;
@@ -52,6 +53,11 @@ int main(void) {
 	_delay_ms(PRINTER_DELAY);
 
 	system_timer_init();
+
+	USART0_printf("\n\n  ******************* About to SPI_Init() *************** \n\n");
+
+	retval = SPI_Init();
+	USART0_printf("After SPI_Init: %d\n", retval);
 
 	USART1_Init(9600);
 
@@ -159,6 +165,7 @@ int main(void) {
 		step++;
 		if (step > 9) {
 			step = 0;
+			//break;
 		}
 		_delay_ms(66);
 	}

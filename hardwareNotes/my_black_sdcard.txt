@@ -1,0 +1,23 @@
+
+black SD card, 16 GB, SDHC
+says: read: 80 MB/s, write: 45 MB/s
+
+From the CSD register:
+
+0x40  - this is version 2 of the CSD structure
+ e - hardcoded for version 2
+ 0 - hardcoded for version 2
+32 - max data transfer rate  (time value: 2.5,  unit: 10Mbit) == 25MHz
+5b - card command classes (high) (8 bits)
+59 - char command classes (low)  (4 bits) and read data block length == 512 bytes
+ 0 - 4 flags, and 4 bits of reserved
+ 0 - 2 bits of reserved, 6 bits (high) of C_SIZE
+77 - 8 bits (mid) of C_SIZE
+5f - 8 bits (low) of C_SIZE
+7f - 1 bit reserved, 1 bit erase_block_enable, 6 bits(high) of erase sector size
+80 - 1 bit (low) of erase sector size, 7 bits of write protect group size
+ a - 1 bit of wp_grp_enable, 2 bits reserved, 3 bits of r2w_factor, 2 bits (high) of write_bl_len
+40 - 2 bits(low) of write_bl_len, 1 bit of partial writes, 5 bits reserved
+ 0 - 1 bit file_format_grp, 1 bit copy, 1 bit write_protect, 1 bit write_protect, 2 bit file_format, 2 bit reserved
+4b - 7 bit CRC, 1 bit "1"
+
