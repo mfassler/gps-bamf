@@ -15,12 +15,17 @@
 
 
 int accel_init(void) {
-	// From adafruit:
-	// write to LSM303_REGISTER_ACCEL_CTRL_REG1_A (0x20), value 0x57
-	// read from same register, expect same value
 	int retval;
 
-	char writeBuf[] = {0x20, 0x57};
+	// -----------------
+	// Enable the device
+	// -----------------
+
+	// 0x20 is CTRL_REG1_A
+	// 0x5. sets update rate to 100 Hz
+	// 0x2. sets update rate to 10 Hz
+	// 0x.7 turns on the device and enables all three axes
+	char writeBuf[] = {0x20, 0x27};
 	char readBuf[] = {0x00};
 
 	bamf_twi_write(ACCEL_SLA_W, writeBuf, 2);
@@ -28,8 +33,29 @@ int accel_init(void) {
 	if (retval < 0) {
 		return retval;
 	}
-	if (readBuf[0] != 0x57) {
+	if (readBuf[0] != 0x27) {
 		return -99;  // so many problems...
+	}
+
+
+	// ------------------
+	// Set the data range
+	// ------------------
+
+	// CTRL_REG4_A:
+	writeBuf[0] = 0x23;
+	// 0x10 sets the range to be +/- 4G (instead of 2G)
+	writeBuf[1] = 0x10;
+
+	readBuf[0] = 0x00;
+
+	bamf_twi_write(ACCEL_SLA_W, writeBuf, 2);
+	retval = bamf_twi_write_read(ACCEL_SLA_W, writeBuf, 1, ACCEL_SLA_R, readBuf, 1);
+	if (retval < 0) {
+		return retval;
+	}
+	if (readBuf[0] != 0x10) {
+		return -98;
 	}
 
 	return 0;
