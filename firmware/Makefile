@@ -77,6 +77,15 @@ all: $(TARGET).hex
 install: $(TARGET).hex
 	$(AVRDUDE) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM)
 
+
+.PHONY: getLowFuse
+getLowFuse:
+	$(AVRDUDE) -U lfuse:r:lfuse.txt:r
+
+.PHONY: setLowFuse
+setLowFuse:
+	$(AVRDUDE) -U lfuse:w:lfuse.txt:r  # set to 0xe7 for full-swing crystal osc
+
 .PHONY: size
 size: ${TARGET}.hex
 	@echo
